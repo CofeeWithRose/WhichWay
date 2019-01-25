@@ -1,8 +1,8 @@
 import * as Koa from 'koa';
 import * as KoaStatic from 'koa-static';
 import * as Path from 'path';
-import RedirectById from './plugins/RedirectById';
-import SocketClientManager from './plugins/RedirectById/SocketManager';
+import RedirectById from './plugins/RedirectById/implament';
+import SocketClientManager from './plugins/RedirectById/implament/SocketManager';
 
 const app = new Koa();
 const socketClientManager = new SocketClientManager
