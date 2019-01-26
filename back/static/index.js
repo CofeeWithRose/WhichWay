@@ -3,6 +3,6 @@ ws.onopen = function wsOpen(){
     console.log('ws open...');
     ws.send(JSON.stringify({
         type: 'login',
-        roomId: ''
+        roomId: location.search.match(/roomId=\d+/)[0].split('=')[1],
     }))
 }

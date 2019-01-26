@@ -23,7 +23,7 @@ export default class MutiMap<K, V> {
         if(dataArray){
             const dataIndex = dataArray.indexOf(value);
             if( dataIndex > -1 ){
-                dataArray.splice(dataIndex, 0);
+                dataArray.splice(dataIndex, 1);
                 if(!dataArray.length){
                     this.dataMap.delete(key);
                 }
@@ -33,6 +33,10 @@ export default class MutiMap<K, V> {
 
     deleteAll(key: K){
         this.dataMap.delete(key);
+    }
+
+    has(key: K): boolean{
+        return this.dataMap.has(key);
     }
     
 }
