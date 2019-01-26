@@ -2,21 +2,19 @@ import * as Koa from 'koa';
 import * as KoaStatic from 'koa-static';
 import * as Path from 'path';
 import RedirectById from './plugins/RedirectById/implament';
-import SocketClientManager from './plugins/RedirectById/implament/SocketManager';
 
 const app = new Koa();
-const socketClientManager = new SocketClientManager
 
 app.use(KoaStatic(Path.resolve(__dirname,'../static'),{defer: true}));
 
-app.use(RedirectById(/^\/$/,socketClientManager));
+app.use( RedirectById(/^\/$/) );
 
 
-app.use(async (ctx, next) => {
-//   await next();
-//   const rt = ctx.response.get('X-Response-Time');
-  console.log(ctx.url);
-});
+// app.use(async (ctx, next) => {
+// //   await next();
+// //   const rt = ctx.response.get('X-Response-Time');
+//   console.log(ctx.url);
+// });
 
 // // x-response-time
 

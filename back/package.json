@@ -13,12 +13,12 @@
     "@types/koa": "^2.0.48",
     "@types/koa-static": "^4.0.0",
     "koa": "^2.6.2",
-    "koa-static": "^5.0.0",
-    "typescript": "^3.2.4"
+    "koa-static": "^5.0.0"
   },
   "devDependencies": {
     "@types/ws": "^6.0.1",
     "nodemon": "^1.18.9",
+    "typescript": "^3.2.4",
     "ws": "^6.1.3"
   }
 }

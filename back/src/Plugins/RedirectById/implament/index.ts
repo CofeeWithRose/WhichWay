@@ -4,7 +4,10 @@ import SocketClientManager from './SocketManager';
 
 
 
-export default function RedirectById(pathNameReg: RegExp, socketClientManager: SocketClientManager){
+export default function RedirectById(pathNameReg: RegExp){
+
+    const socketClientManager = new  SocketClientManager();
+    
     return (ctx: Koa.ParameterizedContext<any,{}>, next:()=> Promise<any> )=>{
         if(
             pathNameReg.test(ctx.URL.pathname) && 
@@ -12,7 +15,7 @@ export default function RedirectById(pathNameReg: RegExp, socketClientManager: S
         ){
            ctx.response.redirect(`${ctx.URL.pathname}?roomId=${socketClientManager.createRoomId()}`);
         }
-        console.log('redirect： ',ctx.URL.searchParams.get('roomeId'),'pathname: ',ctx.URL.pathname);
+        // console.log('redirect： ',ctx.URL.searchParams.get('roomeId'),'pathname: ',ctx.URL.pathname);
         
     }
 }
