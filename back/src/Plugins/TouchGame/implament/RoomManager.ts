@@ -1,6 +1,9 @@
 import * as WebSocket from 'ws';
 import { RoomManagerInterface } from '../interface/RoomManager';
 import {IdManagerInterface} from '../interface/IdManager';
+import { Client } from '../data/Client';
+import { RoomInterface } from '../interface/RoomInterface';
+import { Room } from './Room';
 
 
 export class RoomManager implements RoomManagerInterface{
@@ -11,6 +14,20 @@ export class RoomManager implements RoomManagerInterface{
     
     }
 
+    /**
+     * 用于累加生成客户端 id .
+     */
+    private clientId = 0;
+
+    /**
+     * ws 与客户端的对应关系.
+     */
+    private ws2ClientMap = new Map<WebSocket, Client>();
+
+    /**
+     * roomId 与 room 的映射关系.
+     */
+    private roomId2RomMap = new Map<number, RoomInterface>();
 
     /**
      * 为页面生成管理 roomId.
@@ -24,25 +41,51 @@ export class RoomManager implements RoomManagerInterface{
      * @param roomId 房间 Id.
      * @param ws 
      */
-    enterRoom(roomId: number, ws: WebSocket):void {
+    enterRoom(roomId: number, ws: WebSocket, delayMiles: number):void {
+        
+        if(!this.idManager.checkRoomId(roomId)){
+            this.idManager.reCoverRoomId(roomId);
+        }
 
+        let room = this.roomId2RomMap.get(roomId);
+        if(!room){
+            room = new Room(roomId);
+            this.roomId2RomMap.set(roomId, room);
+            console.log(`add room ${room.Id}`);
+
+        }
+
+        let client = this.ws2ClientMap.get(ws);
+
+        if(!client){
+            client = new Client( ++this.clientId, ws, delayMiles, roomId);
+            this.ws2ClientMap.set(ws, client);
+        }
+        room.addClient(client);
     }
 
     /**
      * 给房间特定的客户端添加用户.
-     * @param roomId
+     * @param playerId
      * @param ws 
      */
-    addUser(ws:WebSocket):void{
-
+    addPlayer(ws:WebSocket, playerId: number):void{
+        const client = this.ws2ClientMap.get( ws);
+        const room = this.roomId2RomMap.get(client.roomId);
+        room.addPlayer(client, playerId);
+        console.log('addplayer roomid: ', room.Id,'playerid: ', playerId);
     }
 
     /**
      * 从房间中删除用户.
-     * @param userId 
+     * @param playerId 
+     * @param ws
      */
-    removeUser( userId: number):void{
-
+    deletePlayer( ws: WebSocket, playerId: number):void{
+        const client = this.ws2ClientMap.get(ws);
+        const room = this.roomId2RomMap.get(client.roomId);
+        room.deletePlayer(client, playerId);
+     
     }
 
     /**
@@ -50,7 +93,20 @@ export class RoomManager implements RoomManagerInterface{
      * @param ws 
      */
     outRoom( ws: WebSocket): void{
+        const client = this.ws2ClientMap.get(ws);
+        const room = this.roomId2RomMap.get(client.roomId);
+
+        this.ws2ClientMap.delete(ws);
         
+        room.deleteClient(client);
+        
+        if(!room.getClientCount()){
+            this.roomId2RomMap.delete(client.roomId);
+            this.idManager.deleteRoomId(client.roomId);
+            console.log(`destory room ${room.Id}`);
+        }
+        console.log(`${client.roomId} out room: ` , this.roomId2RomMap);
+       
     }
 
 

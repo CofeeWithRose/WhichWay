@@ -28,12 +28,16 @@ export  class Room implements RoomInterface {
          this.clientSet.add(newClient);
     }
 
-    removeClient(oldClient: Client): void{
+    deleteClient(oldClient: Client): void{
+        
         const clientUserSet = this.client2PlayerMap.get(oldClient);
-         // 删除userSet的user.
-         clientUserSet.forEach( player => this.playerSet.delete(player));
+
+        // 删除userSet的user.
+        clientUserSet && clientUserSet.forEach( player => this.playerSet.delete(player));
+        
         // 删除usersMap中的client.
         this.client2PlayerMap.deleteAll(oldClient); 
+        
         // 删除 clientSet 中的ws.
         this.clientSet.delete(oldClient);
        
@@ -50,6 +54,8 @@ export  class Room implements RoomInterface {
         this.playerSet.add(player);
         this.client2PlayerMap.add(client, player);
         this.clientPlayerKey2Player.set(key, player);
+        console.log('deletePlayer: roomid:',client.roomId, 'playerid: ', playerId);
+        console.log('playerSet: ', this.playerSet.size);
     }
 
     deletePlayer(client: Client, playerId: number): void{

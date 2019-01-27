@@ -25,7 +25,7 @@ export interface RoomInterface{
 
     addClient(newClient: Client): void;
 
-    removeClient(oldClient: Client): void;
+    deleteClient(oldClient: Client): void;
 
     addPlayer(client: Client, playerId: number): void;
 

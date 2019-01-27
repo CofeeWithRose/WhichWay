@@ -1,6 +1,5 @@
 import * as WebSocket from "ws"
 import * as  http from 'http';
-import MutiMap from '../../../Utils/Map/MutiMap/implement/MutiMap';
 import { MessageType, GameManagerInterface } from "../interface/GameManager";
 import {IdManagerInterface} from "../interface/IdManager";
 import IdManager from "./IdManager";
@@ -22,6 +21,8 @@ export default class GameManager implements GameManagerInterface{
 
     private initProcess(){
         this.processer.set(MessageType.LOGIN, this.onLogin.bind(this));
+        this.processer.set(MessageType.ADD_PLAYER, this.onAddPlayer.bind(this));
+        this.processer.set(MessageType.DELETE_PLAYER, this.onDeletePlayer.bind(this));
     }
 
     private initWss(wsPort: number){
@@ -64,13 +65,16 @@ export default class GameManager implements GameManagerInterface{
     }
 
     onLogin(message: {type: string, roomId: number|string, currentMileSeconds: number }, ws: WebSocket){
+
         const roomId = message && Number(message.roomId);
         if(!roomId ){
             console.warn('TouchGame: login whithout room id!');
             return;
         }else{
 
-            this.roomManager.enterRoom( roomId, ws );
+            const delayMiles =  message.currentMileSeconds? Date.now() - message.currentMileSeconds : 0;
+            
+            this.roomManager.enterRoom( roomId, ws, delayMiles );
 
             // if(!this.idManager.checkRoomId(roomId)){
             //     this.idManager.reCoverRoomId(roomId);
@@ -86,15 +90,25 @@ export default class GameManager implements GameManagerInterface{
     onLogOut(ws: WebSocket){
 
         this.roomManager.outRoom( ws );
-    
-        // const roomId = this.ws2RoomIdMap.get(ws);
-        // console.---(`TouchGame: close client in ${ roomId }`);
-        // this.ws2RoomIdMap.delete(ws);
-        // this.roomId2WsArrayMap.deleteItem(roomId, ws);
-        // if( !this.roomId2WsArrayMap.has(roomId) ){
-        //     this.idManager.deleteRoomId(roomId);
-        //     console.log(`TouchGame: room ${ roomId } is destroied.`);
-        // }
+    }
+
+    onAddPlayer(message: { type: MessageType, playerId: number}, ws: WebSocket){
+        const playerId = Number(message.playerId);
+        if(isNaN(playerId)){
+            console.error(' 没有 playerId ');
+        } else{
+            this.roomManager.addPlayer( ws, playerId );
+        }
+        
+    }
+
+    onDeletePlayer( message: { type: MessageType, playerId: number}, ws: WebSocket ){
+        const playerId = Number(message.playerId);
+        if(isNaN(playerId)){
+            console.error(' 没有 playerId ');
+        } else{
+            this.roomManager.deletePlayer( ws, playerId );
+        }
     }
     
     createRoomId(): number{

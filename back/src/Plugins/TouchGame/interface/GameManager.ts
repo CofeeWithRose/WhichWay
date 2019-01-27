@@ -1,7 +1,8 @@
 import * as WebSocket from 'ws';
 export enum MessageType{
     LOGIN = 'login',
-    ADD_POINT = 'addPoint',
+    ADD_PLAYER = 'addPlayer',
+    DELETE_PLAYER = 'deletePlayer',
 }
 
 export interface GameManagerInterface{
