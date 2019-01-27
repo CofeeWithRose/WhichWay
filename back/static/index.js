@@ -1,4 +1,10 @@
 
+window.addEventListener('keyup', event => {
+    if(event.code === 'Space'){
+        start();
+    }
+})
+
 function start(){
     console.log('start...')
     ws.send(JSON.stringify({

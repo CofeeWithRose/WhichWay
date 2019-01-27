@@ -4,6 +4,9 @@ import { MutiMapInterface } from "../../../Utils/Map/MutiMap/interface/MutiMap";
 import MutiMap from "../../../Utils/Map/MutiMap/implement/MutiMap";
 import { Client } from "../data/Client";
 import { MessageType } from "../interface/GameManager";
+import { Order } from "../data/Order";
+import { strict } from "assert";
+import { stringify } from "querystring";
 
 export  class Room implements RoomInterface {
 
@@ -107,8 +110,47 @@ export  class Room implements RoomInterface {
     }
 
     start(){
-        // TODO.
+        if(this.playerSet.size < 2){
+            console.log('未到两个人');
+            return;
+        }
         console.log(`${this.Id} room start.`);
+        // TODO.
+        const lastSeconds = 4; //闪动时长.
+        const perSeconds = 300; // 每次闪动间隔 ms.
+        const blingTimes = parseInt(`${lastSeconds/(0.001 * perSeconds)}`);//总共闪动次数.
+        const player2Orders = new MutiMap<Player, Order>();
+        const playerArray = this.toArray<Player>(this.playerSet);
+        const now = Date.now() + 1000;
+        for(let i = 0; i < blingTimes; i++){
+            const player = playerArray[i%playerArray.length];
+            const order = new Order(now+i*perSeconds+player.client.delayMiles, i===blingTimes-1, player.id);
+            player2Orders.add(player, order);
+        }
+        
+        this.clientSet.forEach( client => {
+            client.ws.send(JSON.stringify({
+                type: MessageType.START,
+                orders: this.getClientOrders(client, player2Orders),
+            }))
+        });
+    }
+    private getClientOrders(client: Client,player2Orders: MutiMap<Player, Order>): Array<Order>{
+        const clientPlayerSet: Set<Player> = this.client2PlayerMap.get(client);
+        const clientOrder = new Array<Order>();
+        clientPlayerSet &&  clientPlayerSet.forEach( player => {
+            const orderSet = player2Orders.get(player);
+            orderSet.forEach( order => {
+                clientOrder.push(order);
+            })
+        });
+        clientOrder.sort((orderA, orderB) => orderA.blingMiles - orderB.blingMiles );
+        return clientOrder;
+    }
+    private toArray<V>( set: Set<V>): Array<V>{
+        const array = new  Array<V>();
+        set.forEach( item => array.push(item));
+      return array;
     }
 
 }
