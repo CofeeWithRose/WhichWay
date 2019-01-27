@@ -1,4 +1,4 @@
-import { User } from "../data/User";
+import { Player } from "../data/User";
 import {MutiMapInterface} from "../../../Utils/Map/MutiMap/interface/MutiMap";
 import { Client } from "../data/Client";
 
@@ -17,22 +17,24 @@ export interface RoomInterface{
 
     readonly Id: number;
 
-    readonly UserArray: Set<User>;
+    // readonly PlayerSet: Set<Player>;
 
-    readonly ClientArray: Set<Client>;
+    // readonly ClientArray: Set<Client>;
 
-    readonly Client2UserMap: MutiMapInterface<Client, User>;
+    // readonly Client2PlayerMap: MutiMapInterface<Client, Player>;
 
     addClient(newClient: Client): void;
 
     removeClient(oldClient: Client): void;
 
-    addUser(client: Client, userId: number): void;
+    addPlayer(client: Client, playerId: number): void;
 
-    deleteUser(client: Client, userId: number): void;
+    deletePlayer(client: Client, playerId: number): void;
 
     getClientCount(): number;
 
-    getUserCount(): number;
+    getPlayerCount(): number;
+
+    start(): void;
     
 }

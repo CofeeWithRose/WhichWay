@@ -1,19 +1,16 @@
-import * as WebSocket from 'ws';
 import { Order } from './Order';
+import { Client } from './Client';
 
-export class User{
+export class Player{
     
-    constructor( id: number, client: WebSocket, delayMiles: number ){
-        this.id = id;
+    constructor( playerId: number, client: Client ){
+        this.id = playerId;
         this.client = client;
-        this.delayMiles = delayMiles;
     }
 
     readonly id:number;
 
-    readonly client: WebSocket;
-
-    readonly delayMiles: number;
+    readonly client: Client;
 
     isRunning: boolean;
 

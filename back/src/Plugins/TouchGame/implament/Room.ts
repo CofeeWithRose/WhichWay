@@ -1,5 +1,5 @@
 import { RoomInterface } from "../interface/RoomInterface";
-import { User } from "../data/User";
+import { Player } from "../data/User";
 import { MutiMapInterface } from "../../../Utils/Map/MutiMap/interface/MutiMap";
 import MutiMap from "../../../Utils/Map/MutiMap/implement/MutiMap";
 import { Client } from "../data/Client";
@@ -14,21 +14,11 @@ export  class Room implements RoomInterface {
 
     private clientSet = new Set<Client>();
 
-    private userSet = new Set<User>();
+    private playerSet = new Set<Player>();
 
-    private client2UserMap: MutiMapInterface<Client, User> = new MutiMap<Client, User>();
+    private clientPlayerKey2Player = new Map<string, Player>();
 
-    get ClientArray() : Set<Client> {
-        return this.clientSet;
-    }
-
-    get Client2UserMap(){
-        return this.client2UserMap;
-    }
-
-    get UserArray(): Set<User>{
-        return this.userSet;
-    }
+    private client2PlayerMap: MutiMapInterface<Client, Player> = new MutiMap<Client, Player>();
 
     get Id(): number{
         return this.id;
@@ -39,31 +29,55 @@ export  class Room implements RoomInterface {
     }
 
     removeClient(oldClient: Client): void{
-        const clientUserSet = this.client2UserMap.get(oldClient);
+        const clientUserSet = this.client2PlayerMap.get(oldClient);
          // 删除userSet的user.
-         clientUserSet.forEach( user => this.userSet.delete(user));
+         clientUserSet.forEach( player => this.playerSet.delete(player));
         // 删除usersMap中的client.
-        this.client2UserMap.deleteAll(oldClient); 
+        this.client2PlayerMap.deleteAll(oldClient); 
         // 删除 clientSet 中的ws.
         this.clientSet.delete(oldClient);
        
     }
 
-
-    addUser(ws: Client, userId: number): void{
-        
+    private getClientPlayerKey(clientId: number, playerId: number){
+        return `${clientId}_${playerId}`;
     }
 
-    deleteUser(ws: Client, userId: number): void{
+    addPlayer(client: Client, playerId: number): void{
+        this.addClient(client);
+        const key = this.getClientPlayerKey(client.id, playerId);
+        const player = this.clientPlayerKey2Player.get(key)||new Player( playerId, client);
+        this.playerSet.add(player);
+        this.client2PlayerMap.add(client, player);
+        this.clientPlayerKey2Player.set(key, player);
+    }
+
+    deletePlayer(client: Client, playerId: number): void{
+        const key = this.getClientPlayerKey(client.id, playerId);
+        const player = this.clientPlayerKey2Player.get(key);
+        if(player){
+            this.playerSet.delete(player);
+            this.clientPlayerKey2Player.delete(key);
+            this.client2PlayerMap.deleteItem(client, player);
+            if(!this.client2PlayerMap.size){
+                this.clientSet.delete(client);
+                console.log(`destory client ${client.id}`);
+            }
+        }
+        
 
     }
 
     getClientCount(): number{
-        return 0;
+        return this.clientSet.size;
     }
 
-    getUserCount(): number{
-        return 0;
+    getPlayerCount(): number{
+        return this.playerSet.size;
+    }
+
+    start(){
+        // TODO.
     }
 
 }
