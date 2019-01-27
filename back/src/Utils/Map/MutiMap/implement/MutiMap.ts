@@ -1,4 +1,4 @@
-import MutiMapInterface from '../interface/MutiMap';
+import {MutiMapInterface} from '../interface/MutiMap';
 
 export default class MutiMap<K, V> implements MutiMapInterface<K, V> {
     private dataMap = new Map<K,Array<V>>();

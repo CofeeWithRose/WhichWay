@@ -1,5 +1,5 @@
 import * as WebSocket from "ws"
-import IdManagerInterface from "./IdManager";
+import {IdManagerInterface} from "./IdManager";
 
 interface RoomManagerConstructor{
     new (idManager: IdManagerInterface): RoomManagerInterface

@@ -3,7 +3,7 @@ import * as http from 'http';
 
 import IdManager from "./IdManager";
 import { RoomManagerInterface } from '../interface/RoomManager';
-import IdManagerInterface from '../interface/IdManager';
+import {IdManagerInterface} from '../interface/IdManager';
 
 
 export class RoomManager implements RoomManagerInterface{

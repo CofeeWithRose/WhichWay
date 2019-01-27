@@ -2,7 +2,7 @@ import * as WebSocket from "ws"
 import * as  http from 'http';
 import MutiMap from '../../../Utils/Map/MutiMap/implement/MutiMap';
 import { MessageType, GameManagerInterface } from "../interface/GameManager";
-import IdManagerInterface from "../interface/IdManager";
+import {IdManagerInterface} from "../interface/IdManager";
 import IdManager from "./IdManager";
 import { RoomManager } from "./RoomManager";
 import { RoomManagerInterface, createRoomManager } from "../interface/RoomManager";

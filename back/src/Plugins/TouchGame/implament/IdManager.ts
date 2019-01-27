@@ -1,4 +1,4 @@
-import IdManagerInterface from "../interface/IdManager";
+import {IdManagerInterface} from "../interface/IdManager";
 
 export default class IdManager implements IdManagerInterface{
 
