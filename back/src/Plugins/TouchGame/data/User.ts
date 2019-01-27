@@ -12,7 +12,7 @@ export class Player{
 
     readonly client: Client;
 
-    isRunning: boolean;
+    isRunning = false;
 
     readonly orderArray: Array<Order> = [];
     

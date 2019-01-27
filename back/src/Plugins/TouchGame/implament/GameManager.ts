@@ -23,6 +23,8 @@ export default class GameManager implements GameManagerInterface{
         this.processer.set(MessageType.LOGIN, this.onLogin.bind(this));
         this.processer.set(MessageType.ADD_PLAYER, this.onAddPlayer.bind(this));
         this.processer.set(MessageType.DELETE_PLAYER, this.onDeletePlayer.bind(this));
+        this.processer.set(MessageType.START, this.onStart.bind(this));
+        
     }
 
     private initWss(wsPort: number){
@@ -109,6 +111,11 @@ export default class GameManager implements GameManagerInterface{
         } else{
             this.roomManager.deletePlayer( ws, playerId );
         }
+    }
+
+    onStart( message: { type: MessageType }, ws: WebSocket){
+        console.log('start...');
+        this.roomManager.start(ws);
     }
     
     createRoomId(): number{

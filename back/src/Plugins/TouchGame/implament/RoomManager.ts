@@ -105,10 +105,13 @@ export class RoomManager implements RoomManagerInterface{
             this.idManager.deleteRoomId(client.roomId);
             console.log(`destory room ${room.Id}`);
         }
-        console.log(`${client.roomId} out room: ` , this.roomId2RomMap);
+        console.log(`roomid: ${client.roomId} out room count: ` , this.roomId2RomMap.size);
        
     }
 
-
+    start(ws: WebSocket){
+        const client = this.ws2ClientMap.get(ws);
+        this.roomId2RomMap.get(client.roomId).start();
+    }
 
 }

@@ -3,6 +3,7 @@ import { Player } from "../data/User";
 import { MutiMapInterface } from "../../../Utils/Map/MutiMap/interface/MutiMap";
 import MutiMap from "../../../Utils/Map/MutiMap/implement/MutiMap";
 import { Client } from "../data/Client";
+import { MessageType } from "../interface/GameManager";
 
 export  class Room implements RoomInterface {
 
@@ -19,6 +20,8 @@ export  class Room implements RoomInterface {
     private clientPlayerKey2Player = new Map<string, Player>();
 
     private client2PlayerMap: MutiMapInterface<Client, Player> = new MutiMap<Client, Player>();
+
+    private stopMiles = 0;
 
     get Id(): number{
         return this.id;
@@ -54,8 +57,28 @@ export  class Room implements RoomInterface {
         this.playerSet.add(player);
         this.client2PlayerMap.add(client, player);
         this.clientPlayerKey2Player.set(key, player);
+        this.broadCastPlayerCount(MessageType.ADD_PLAYER);
+        this.showStart();
         console.log('deletePlayer: roomid:',client.roomId, 'playerid: ', playerId);
-        console.log('playerSet: ', this.playerSet.size);
+        console.log('player count: ', this.playerSet.size);
+    }
+
+    private showStart(){
+        if(this.playerSet.size > 1 && this.stopMiles < Date.now()){
+            const client = this.clientSet.values().next().value;
+           client.ws.send(JSON.stringify({
+               type: MessageType.SHOW_START,
+           }))
+        }
+    }
+
+    private broadCastPlayerCount(messageType: MessageType){
+        this.clientSet.forEach( client => {
+            client.ws.send(JSON.stringify( {
+                type: messageType, 
+                playerCount: this.playerSet.size,
+            }));
+        });
     }
 
     deletePlayer(client: Client, playerId: number): void{
@@ -69,6 +92,7 @@ export  class Room implements RoomInterface {
                 this.clientSet.delete(client);
                 console.log(`destory client ${client.id}`);
             }
+            this.broadCastPlayerCount(MessageType.DELETE_PLAYER);
         }
         
 
@@ -84,6 +108,7 @@ export  class Room implements RoomInterface {
 
     start(){
         // TODO.
+        console.log(`${this.Id} room start.`);
     }
 
 }

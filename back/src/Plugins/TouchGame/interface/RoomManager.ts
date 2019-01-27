@@ -41,5 +41,7 @@ export interface RoomManagerInterface{
      */
     outRoom( ws: WebSocket): void;
 
+    start(ws: WebSocket): void;
+
 
 } 
