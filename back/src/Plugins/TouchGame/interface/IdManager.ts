@@ -1,4 +1,4 @@
-export default interface IdManagerInterface{
+export interface IdManagerInterface{
 
     /**
      * 重新启用roomid.

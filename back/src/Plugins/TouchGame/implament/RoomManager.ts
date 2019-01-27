@@ -9,18 +9,20 @@ import IdManagerInterface from '../interface/IdManager';
 export class RoomManager implements RoomManagerInterface{
 
     constructor(idManager: IdManagerInterface){
-        
+
+        this.idManager = idManager;
+    
     }
 
-    
 
     /**
      * 为页面生成管理 roomId.
      */
-    private idManager = new IdManager();
+    private idManager: IdManagerInterface;
+
 
    
- /**
+    /**
      * ws端用户进入房间， 若该Id下没有房间，则注册id并分配房间.
      * @param roomId 房间 Id.
      * @param ws 

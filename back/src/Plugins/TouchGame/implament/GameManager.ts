@@ -7,9 +7,6 @@ import IdManager from "./IdManager";
 import { RoomManager } from "./RoomManager";
 import { RoomManagerInterface, createRoomManager } from "../interface/RoomManager";
 
-
-
-
 export default class GameManager implements GameManagerInterface{
 
     constructor(wsPort: number){
@@ -21,11 +18,7 @@ export default class GameManager implements GameManagerInterface{
 
     private roomManager: RoomManagerInterface = createRoomManager(RoomManager, this.idManager);
 
-    // private roomId2WsArrayMap = new MutiMap<number, WebSocket>();
-
-    // private ws2RoomIdMap = new Map<WebSocket, number>();
-   
-    private processer = new Map<String, (message: object, ws:WebSocket) => void>();
+    private processer = new Map< String, (message: object, ws:WebSocket) => void >();
 
     private initProcess(){
         this.processer.set(MessageType.LOGIN, this.onLogin.bind(this));
@@ -62,7 +55,7 @@ export default class GameManager implements GameManagerInterface{
                 if(fn){
                     fn(message, ws );
                 }else{
-                    console.warn(`TouchGame: no function fount! tyep is [ ${message.tyep} ]`);
+                    console.warn(`TouchGame: no function fount! tyep is 【 ${message.tyep} 】`);
                 }
             }
         }catch(e){
@@ -76,7 +69,9 @@ export default class GameManager implements GameManagerInterface{
             console.warn('TouchGame: login whithout room id!');
             return;
         }else{
-            this.roomManager.enterRoom(roomId, ws);
+
+            this.roomManager.enterRoom( roomId, ws );
+
             // if(!this.idManager.checkRoomId(roomId)){
             //     this.idManager.reCoverRoomId(roomId);
             //     console.log(`TouchGame: create room in ${roomId}`);
@@ -89,15 +84,17 @@ export default class GameManager implements GameManagerInterface{
     }
 
     onLogOut(ws: WebSocket){
+
+        this.roomManager.outRoom( ws );
+    
         // const roomId = this.ws2RoomIdMap.get(ws);
-        // console.log(`TouchGame: close client in ${ roomId }`);
+        // console.---(`TouchGame: close client in ${ roomId }`);
         // this.ws2RoomIdMap.delete(ws);
         // this.roomId2WsArrayMap.deleteItem(roomId, ws);
-        // if(!this.roomId2WsArrayMap.has(roomId)){
+        // if( !this.roomId2WsArrayMap.has(roomId) ){
         //     this.idManager.deleteRoomId(roomId);
         //     console.log(`TouchGame: room ${ roomId } is destroied.`);
         // }
-        this.roomManager.outRoom(ws);
     }
     
     createRoomId(): number{

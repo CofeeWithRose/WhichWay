@@ -9,19 +9,13 @@ export function createRoomManager( roomManagerConstructor:RoomManagerConstructor
     return new roomManagerConstructor(idManager);
 }
 
-
 export interface User{
     delayMileSeconds: number,
     userId: number,
 }
+
 export interface RoomManagerInterface{
     
-    // onMessage(data:WebSocket.Data, ws:WebSocket): void;
-
-    // onLogin(message: {type: string, roomId: number|string, currentMileSeconds: number }, ws: WebSocket):void;
-
-    // onClose(ws: WebSocket): void;
-
     /**
      * ws端用户进入房间， 若该Id下没有房间，则注册id并分配房间.
      * @param roomId 房间 Id.
