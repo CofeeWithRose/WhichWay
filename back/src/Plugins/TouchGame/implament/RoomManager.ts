@@ -1,7 +1,4 @@
 import * as WebSocket from 'ws';
-import * as http from 'http';
-
-import IdManager from "./IdManager";
 import { RoomManagerInterface } from '../interface/RoomManager';
 import {IdManagerInterface} from '../interface/IdManager';
 

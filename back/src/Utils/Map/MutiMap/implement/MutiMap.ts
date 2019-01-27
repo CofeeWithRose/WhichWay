@@ -1,18 +1,18 @@
 import {MutiMapInterface} from '../interface/MutiMap';
 
 export default class MutiMap<K, V> implements MutiMapInterface<K, V> {
-    private dataMap = new Map<K,Array<V>>();
-    get(key: K): Array<V>{
+    private dataMap = new Map<K,Set<V>>();
+    get(key: K): Set<V>{
         return this.dataMap.get(key);
     }
 
     set(key: K, value: V){
-        let dataArray = this.dataMap.get(key);
-        if(!dataArray){
-            dataArray = [];
-            this.dataMap.set(key, dataArray);
+        let dataSet = this.dataMap.get(key);
+        if(!dataSet){
+            dataSet = new Set<V>();
+            this.dataMap.set(key, dataSet);
         }
-        dataArray.push(value);
+        dataSet.add(value);
     }
 
     /**
@@ -21,12 +21,10 @@ export default class MutiMap<K, V> implements MutiMapInterface<K, V> {
      * @param value 
      */
     deleteItem(key: K, value: V){
-        const dataArray = this.dataMap.get(key);
-        if(dataArray){
-            const dataIndex = dataArray.indexOf(value);
-            if( dataIndex > -1 ){
-                dataArray.splice(dataIndex, 1);
-                if(!dataArray.length){
+        const dataSet = this.dataMap.get(key);
+        if(dataSet){
+            if( dataSet.delete(value) ){
+                if(!dataSet.size){
                     this.dataMap.delete(key);
                 }
             }

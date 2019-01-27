@@ -9,10 +9,6 @@ export function createRoomManager( roomManagerConstructor:RoomManagerConstructor
     return new roomManagerConstructor(idManager);
 }
 
-export interface User{
-    delayMileSeconds: number,
-    userId: number,
-}
 
 export interface RoomManagerInterface{
     

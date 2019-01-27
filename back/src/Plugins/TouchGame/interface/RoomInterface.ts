@@ -1,27 +1,38 @@
 import { User } from "../data/User";
-import * as WebSocket from 'ws';
 import {MutiMapInterface} from "../../../Utils/Map/MutiMap/interface/MutiMap";
+import { Client } from "../data/Client";
+
+
+export interface RoomConstructor{
+    new (roomId: number): RoomInterface;
+
+}
+
+export function createRoom(roomConstructor: RoomConstructor, roomId: number){
+    return new roomConstructor(roomId);
+}
 
 export interface RoomInterface{
     
-    new (roomId: number): RoomInterface;
 
     readonly Id: number;
 
-    readonly userArray: Array<User>;
+    readonly UserArray: Set<User>;
 
-    readonly clientArray: Array<WebSocket>;
+    readonly ClientArray: Set<Client>;
 
-    readonly client2UserMap: MutiMapInterface<WebSocket, User>;
+    readonly Client2UserMap: MutiMapInterface<Client, User>;
 
+    addClient(newClient: Client): void;
 
-    removeClient(ws: WebSocket): void;
+    removeClient(oldClient: Client): void;
 
-    addUser(ws: WebSocket, userId: number): void;
+    addUser(client: Client, userId: number): void;
 
-    deleteUser(ws: WebSocket, userId: number): void;
+    deleteUser(client: Client, userId: number): void;
 
     getClientCount(): number;
 
     getUserCount(): number;
+    
 }

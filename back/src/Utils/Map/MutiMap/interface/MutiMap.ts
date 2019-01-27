@@ -1,6 +1,6 @@
 export  interface  MutiMapInterface<K, V> {
 
-    get(key: K): Array<V>;
+    get(key: K): Set<V>;
 
     set(key: K, value: V): void;
 
