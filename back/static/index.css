@@ -9,6 +9,11 @@ body, html{
     color: white;
 }
 
+button{
+    width: 100px;
+    height: 100px;
+}
+
 .hide{
     display: none;
 }

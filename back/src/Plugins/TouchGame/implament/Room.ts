@@ -115,10 +115,9 @@ export  class Room implements RoomInterface {
             return;
         }
         console.log(`${this.Id} room start.`);
-        // TODO.
-        const lastSeconds = 8; //闪动时长.
-        const perSeconds = 1000; // 每次闪动间隔 ms.
-        const blingTimes = parseInt(`${lastSeconds/(0.001 * perSeconds)}`);//总共闪动次数.
+        const lastSeconds = 5; //闪动时长.
+        const perSeconds = 300; // 每次闪动间隔 ms.
+        const blingTimes =   parseInt(`${lastSeconds/(0.001 * perSeconds) + Math.random() * this.playerSet.size}`);//总共闪动次数.
         const player2Orders = new MutiMap<Player, Order>();
         const playerArray = this.toArray<Player>(this.playerSet);
         const now = Date.now() + 1000;
@@ -145,7 +144,6 @@ export  class Room implements RoomInterface {
             })
         });
         clientOrder.sort((orderA, orderB) => orderA.blingMiles - orderB.blingMiles );
-        console.log(clientOrder.map( o => o.blingMiles));
         return clientOrder;
     }
     private toArray<V>( set: Set<V>): Array<V>{

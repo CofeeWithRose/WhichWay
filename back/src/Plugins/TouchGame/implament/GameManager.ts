@@ -74,7 +74,7 @@ export default class GameManager implements GameManagerInterface{
             return;
         }else{
 
-            const delayMiles =  message.currentMileSeconds? Date.now() - message.currentMileSeconds : 0;
+            const delayMiles =  message.currentMileSeconds?   message.currentMileSeconds - Date.now() : 0;
 
             console.log('delayMiles： ', delayMiles);
             
