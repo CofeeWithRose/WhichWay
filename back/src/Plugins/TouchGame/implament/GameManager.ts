@@ -75,6 +75,8 @@ export default class GameManager implements GameManagerInterface{
         }else{
 
             const delayMiles =  message.currentMileSeconds? Date.now() - message.currentMileSeconds : 0;
+
+            console.log('delayMiles： ', delayMiles);
             
             this.roomManager.enterRoom( roomId, ws, delayMiles );
 
