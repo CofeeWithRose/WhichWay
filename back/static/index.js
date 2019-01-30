@@ -1,5 +1,6 @@
 
 const mainDom = document.body.querySelector('#main');
+const operateLayerDom = document.body.querySelector('#operateLayer');
 // document.body.requestFullScreen();
 var orders = [];
 window.addEventListener('keyup', event => {
@@ -157,12 +158,10 @@ function handleTouchMove( touchEvent ){
         }
 }
 
-mainDom.addEventListener('touchstart', event => {
-    handleTouchStart(event);
-});
-mainDom.addEventListener('touchmove', handleTouchMove );
-mainDom.addEventListener('touchend', handleTouchEnd);
-mainDom.addEventListener('touchcancel', handleTouchEnd);
+operateLayerDom.addEventListener('touchstart', handleTouchStart);
+operateLayerDom.addEventListener('touchmove', handleTouchMove );
+operateLayerDom.addEventListener('touchend', handleTouchEnd);
+operateLayerDom.addEventListener('touchcancel', handleTouchEnd);
 
 
 function handleStart(message){
