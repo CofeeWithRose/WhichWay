@@ -7,7 +7,6 @@ WORKDIR /home/game
 # Bundle app source
 COPY . /home/game
 RUN npm install
-RUN npm install typescript -g
 EXPOSE 8000
 EXPOSE 3000
-CMD npm start > ./game_log.log
+CMD npm run serve > ./game_log.log
