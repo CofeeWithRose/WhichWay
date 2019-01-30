@@ -48,13 +48,12 @@ function createPlayer(playerId, touch){
 function setPlayerPosition( playerId, touch ){
     const player = playerMap[playerId];
     if(player){
-        const translate3d  = `translate3d(${touch.clientX - 50 }px,${touch.clientY - 50}px,0px)`; 
+        const translate3d  = `translate3d(${touch.clientX - 50 }px,${touch.clientY - 50}px,0px) `; 
         player.style.transform = player.style.transform? 
             player.style.transform.replace(
-                /translate3d(.*,.*,.*)/,
+                /translate3d.*px\)/,
                 translate3d
-            ) : `${translate3d} scale3d(1,1, 1)`;
-
+            ) : `${translate3d}scale3d(1, 1, 1)`;
     }
 }
 
