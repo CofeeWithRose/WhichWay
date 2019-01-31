@@ -19,7 +19,7 @@ button{
 }
 .layer{
     position: absolute;
-    z-index: 100;
+    z-index: 200;
 }
 .main{
     /* background: black; */
