@@ -162,7 +162,7 @@ export  class Room implements RoomInterface {
         const halfCount = orderCount  * 0.5;
         for(let i = 0; i < orderCount; i++){
             const player = playerArray[i%playerArray.length];
-            const  perSecond = lastSeconds * Math.asin( i/halfCount - i%halfCount )/ Math.PI;
+            const  perSecond = lastSeconds * Math.asin( i/halfCount - Math.floor(i/halfCount) )/ Math.PI;
             startMiles += perSecond
             console.log('perSecond:　', perSecond, 'index: ' , i);
             const order = new Order(now + startMiles + player.client.delayMiles, i===orderCount-1, player.id, perSecond);
