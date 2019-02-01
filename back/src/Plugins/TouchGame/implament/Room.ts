@@ -119,13 +119,8 @@ export  class Room implements RoomInterface {
         const perSeconds = 150; // 每次闪动间隔 ms.
         const blingTimes =   parseInt(`${lastSeconds/(0.001 * perSeconds) + Math.random() * this.playerSet.size}`);//总共闪动次数.
         const player2Orders = new MutiMap<Player, Order>();
-        // const playerArray = this.toArray<Player>(this.playerSet);
-        // for(let i = 0; i < blingTimes; i++){
-        //     const player = playerArray[i%playerArray.length];
-        //     const order = new Order(now+i*perSeconds+player.client.delayMiles, i===blingTimes-1, player.id, perSeconds);
-        //     player2Orders.add(player, order);
-        // }
-        this.setOrderArray( lastSeconds, blingTimes, player2Orders );
+   
+        this.setOrderArray( lastSeconds, blingTimes +Math.floor(Math.random() * this.playerSet.size), player2Orders );
         
         this.clientSet.forEach( client => {
             client.ws.send(JSON.stringify({
@@ -163,7 +158,6 @@ export  class Room implements RoomInterface {
         for(let i = 0; i < orderCount; i++){
             const player = playerArray[i%playerArray.length];
             const  perSecond = lastSeconds * Math.acos( (halfCount - i)/halfCount )/ Math.PI;
-            console.log('perSecond:　', perSecond, 'index: ' , i);
             const isLast =  i === orderCount-1;
             const order = new Order(now + perSecond + player.client.delayMiles, isLast, player.id );
             player2Orders.add(player, order);
