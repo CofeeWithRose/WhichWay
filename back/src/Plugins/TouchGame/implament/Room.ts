@@ -153,20 +153,19 @@ export  class Room implements RoomInterface {
     }
 
     private setOrderArray( lastSeconds: number, orderCount:number, player2Orders: MutiMap<Player, Order> ): Array<number>{
-       
+        lastSeconds = lastSeconds * 1000;
         const playerArray = this.toArray<Player>(this.playerSet);
         const now = Date.now() + 1000;
-        
+        let lastPerSecond = 0;
         const orderArray = new Array<number>();
-        let startMiles = 0;
         const halfCount = orderCount  * 0.5;
         for(let i = 0; i < orderCount; i++){
             const player = playerArray[i%playerArray.length];
-            const  perSecond = lastSeconds * Math.asin( i/halfCount - Math.floor(i/halfCount) )/ Math.PI;
-            startMiles += perSecond
+            const  perSecond = lastSeconds * Math.acos( (halfCount - i)/halfCount )/ Math.PI;
             console.log('perSecond:　', perSecond, 'index: ' , i);
-            const order = new Order(now + startMiles + player.client.delayMiles, i===orderCount-1, player.id, perSecond);
+            const order = new Order(now + perSecond + player.client.delayMiles, i===orderCount-1, player.id, perSecond - lastPerSecond);
             player2Orders.add(player, order);
+            lastPerSecond = perSecond;
         }
         return orderArray;
 

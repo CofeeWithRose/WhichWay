@@ -187,7 +187,7 @@ function startAnim(){
                     player.style.background = playerColor.value;
                     player.style.transform = player.style.transform.replace(/scale3d(.*,.*,.*)/, 'scale3d(1, 1, 1)');
                     console.log( player.style.transform );
-                },150)
+                },order.lastMiles);
             }
             orders.shift();
         }
