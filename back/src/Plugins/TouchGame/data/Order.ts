@@ -1,12 +1,14 @@
 export class Order {
 
-    constructor( blingMiles:number, isLast: boolean, playerId: number ){
+    constructor( blingMiles:number, isLast: boolean, playerId: number, lastMiles: number ){
 
         this.blingMiles = blingMiles;
         
         this.isLast = isLast? true : false;
 
         this.playerId = playerId;
+
+        this.lastMiles = lastMiles;
     }
 
     readonly blingMiles: number;
@@ -15,4 +17,6 @@ export class Order {
 
     readonly playerId: number;
 
+    readonly lastMiles: number;
+    
 }

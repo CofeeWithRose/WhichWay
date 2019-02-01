@@ -43,7 +43,6 @@ function createPlayer(playerId, touch){
     player.className = 'player';
     setPlayerPosition(playerId, touch);
     mainDom.appendChild(player);
-    
 }
 
 function setPlayerPosition( playerId, touch ){
