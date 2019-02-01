@@ -156,6 +156,7 @@ export  class Room implements RoomInterface {
         lastSeconds = lastSeconds * 1000;
         const playerArray = this.toArray<Player>(this.playerSet);
         const now = Date.now() + 1000;
+        let lastOrder: Order;
         let lastPerSecond = 0;
         const orderArray = new Array<number>();
         const halfCount = orderCount  * 0.5;
@@ -163,8 +164,13 @@ export  class Room implements RoomInterface {
             const player = playerArray[i%playerArray.length];
             const  perSecond = lastSeconds * Math.acos( (halfCount - i)/halfCount )/ Math.PI;
             console.log('perSecond:　', perSecond, 'index: ' , i);
-            const order = new Order(now + perSecond + player.client.delayMiles, i===orderCount-1, player.id, perSecond - lastPerSecond);
+            const isLast =  i === orderCount-1;
+            const order = new Order(now + perSecond + player.client.delayMiles, isLast, player.id );
             player2Orders.add(player, order);
+            if(lastOrder){
+                lastOrder.lastMiles = perSecond - lastPerSecond;
+            }
+            lastOrder = order;
             lastPerSecond = perSecond;
         }
         return orderArray;
